@@ -1,54 +1,41 @@
 import logo from "./logo.svg"
 import { Counter } from "./features/counter/Counter"
+import { useState, useEffect } from "react";
+
 import "./App.css"
 
 function App() {
+
+  // usestate for setting a javascript
+  // object for storing and using data
+  const [data, setdata] = useState({
+    name: "",
+    age: 0,
+    date: "",
+    programming: "",
+  });
+
+  // Using useEffect for single rendering
+  useEffect(() => {
+    // Using fetch to fetch the api from
+    // flask server it will be redirected to proxy
+    fetch("/data").then((res) =>
+      res.json().then((data) => {
+        // Setting a data from api
+        setdata({
+          name: data.Name,
+          age: data.Age,
+          date: data.Date,
+          programming: data.programming,
+        });
+      })
+    );
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
+        {JSON.stringify(data)}
       </header>
     </div>
   )
