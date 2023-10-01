@@ -11,10 +11,11 @@ import {
 } from "./incidentsSlice";
 import styles from "./Incidents.module.css"
 
+import { Form } from "../form/Form";
+
 const Incident = ({ value, awesomeFunction }) => {
-  const { title, id } = value;
-  console.log(id, 'active incident');
-  return <tr onClick={() => awesomeFunction(id)} key={id}><td>{id}</td><td>{title}</td></tr>
+  const { title, id, status } = value;
+  return <tr onClick={() => awesomeFunction(id)} key={id}><td>{id}</td><td>{status}</td><td>{title}</td></tr>
 }
 
 const IncidentsList = ({ incidents, awesomeFunction }) => {
@@ -24,6 +25,7 @@ const IncidentsList = ({ incidents, awesomeFunction }) => {
       <thead>
         <tr>
           <th>id</th>
+          <th>status</th>
           <th>title</th>
         </tr>
       </thead>
@@ -56,6 +58,8 @@ export function Incidents() {
   const activeIncident = useAppSelector(activeIncidentSelector);
   const dispatch = useAppDispatch();
 
+  const [isCreating, setIsCreating] = useState(false);
+
   useEffect(() => {
     dispatch(getIncidentsAsync(activeService))
   }, [activeService]);
@@ -68,12 +72,16 @@ export function Incidents() {
   return (
     <div>
       <h3>Incidents at: {activeServiceName}</h3>
-      {allIncidentsByService.length && <IncidentsList incidents={allIncidentsByService} awesomeFunction={awesomeFunction} />}
-      {activeIncident.length && <div>
+      <button onClick={() => setIsCreating(!isCreating)}>Create new Incident</button>
+      {!isCreating && allIncidentsByService.length && <IncidentsList incidents={allIncidentsByService} awesomeFunction={awesomeFunction} />}
+      {!isCreating && activeIncident.length && <div>
         <ActiveService
           data={activeIncident}
         />
       </div> || null
+      }
+      {
+        !!isCreating && <Form />
       }
     </div>
   )
