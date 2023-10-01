@@ -27,7 +27,6 @@ export const servicesSlice = createSlice({
   initialState,
   reducers: {
     setActiveService(state, action: PayloadAction<String>) {
-      console.log(action.payload, 'jijijo');
       state.activeServiceId = action.payload;
     }
   },

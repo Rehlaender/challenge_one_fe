@@ -9,6 +9,8 @@ import {
 } from "./servicesSlice"
 import styles from "./Services.module.css"
 
+import { Incidents } from "../incidents/Incidents"
+
 const Service = ({ value, awesomeFunction }) => {
   const { name, id } = value;
 
@@ -21,10 +23,12 @@ const ActiveService = ({data}) => {
     <>
       <h2>active service</h2>
       <div>
-        <p>name: {service.name}</p>
-        <p>id: {service.id}</p>
-        <p>description: {service.description}</p>
+        <p>name: {service?.name}</p>
+        <p>id: {service?.id}</p>
+        <p>description: {service?.description}</p>
       </div>
+      <button>home</button>
+      <button>open incidents 4 service</button>
     </>
   )
 }
@@ -64,9 +68,11 @@ export function Services() {
       <div>
         <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
       </div>
-      <div>
+      {activeService.length && <div>
         <ActiveService data={activeService}/>
-      </div>
+      </div> || null
+      }
+      <Incidents />
     </div>
   )
 }
