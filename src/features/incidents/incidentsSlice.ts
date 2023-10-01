@@ -52,6 +52,6 @@ export const { setActiveIncident } = incidentsSlice.actions;
 export const serviceSelector = (state: RootState) => state.services.activeServiceId;
 export const activeServiceNameSelector = (state: RootState) => state.services?.services.filter(item => item.id === state.services.activeServiceId)[0]?.name;
 export const incidentsSelector = (state: RootState) => state.incidents?.incidents;
-export const activeIncidentSelector = (state: RootState) => state.incidents.incidents.filter(item => item.id === state.incidents.activeIncidentId);
+export const activeIncidentSelector = (state: RootState) => state.incidents?.incidents.filter(item => item.id === state.incidents.activeIncidentId);
 
 export default incidentsSlice.reducer
