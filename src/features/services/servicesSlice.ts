@@ -5,13 +5,15 @@ import { fetchServices } from "./servicesAPI"
 export interface ServicesState {
   services: Array<any>,
   activeServiceId: String,
-  status: "idle" | "loading" | "failed"
+  status: "idle" | "loading" | "failed",
+  openIncidents: Boolean,
 }
 
 const initialState: ServicesState = {
   services: [],
   activeServiceId: 'asdf',
   status: "idle",
+  openIncidents: false,
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -28,6 +30,9 @@ export const servicesSlice = createSlice({
   reducers: {
     setActiveService(state, action: PayloadAction<String>) {
       state.activeServiceId = action.payload;
+    },
+    setOpenIncidents(state, action: PayloadAction<Boolean>) {
+      state.openIncidents = action.payload;
     }
   },
   extraReducers: (builder) => {
@@ -45,9 +50,10 @@ export const servicesSlice = createSlice({
   },
 })
 
-export const { setActiveService } = servicesSlice.actions;
+export const { setActiveService, setOpenIncidents } = servicesSlice.actions;
 
 export const selectServices = (state: RootState) => state.services.services;
 export const activeServiceSelector = (state: RootState) => state.services.services.filter(item => item.id === state.services.activeServiceId);
+export const shouldRenderIncidentsSelector = (state: RootState) => state.services.openIncidents;
 
 export default servicesSlice.reducer

@@ -5,7 +5,9 @@ import {
   incrementAsync,
   selectServices,
   setActiveService,
+  setOpenIncidents,
   activeServiceSelector,
+  shouldRenderIncidentsSelector,
 } from "./servicesSlice"
 import styles from "./Services.module.css"
 
@@ -17,7 +19,7 @@ const Service = ({ value, awesomeFunction }) => {
   return <tr onClick={() => awesomeFunction(id)} key={id}><td>{id}</td><td>{name}</td></tr>
 }
 
-const ActiveService = ({data}) => {
+const ActiveService = ({ data, openServices, status }) => {
   const service = data[0]
   return (
     <>
@@ -28,7 +30,7 @@ const ActiveService = ({data}) => {
         <p>description: {service?.description}</p>
       </div>
       <button>home</button>
-      <button>open incidents 4 service</button>
+      <button onClick={() => openServices()}>{status ? 'close incidents' : 'open incidents 4 service'}</button>
     </>
   )
 }
@@ -53,6 +55,7 @@ const ServicesList = ({ services, awesomeFunction }) => {
 export function Services() {
   const allServices = useAppSelector(selectServices)
   const activeService = useAppSelector(activeServiceSelector)
+  const shouldRenderIncidents = useAppSelector(shouldRenderIncidentsSelector)
   const dispatch = useAppDispatch()
 
   function awesomeFunction(id) {
@@ -69,10 +72,14 @@ export function Services() {
         <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
       </div>
       {activeService.length && <div>
-        <ActiveService data={activeService}/>
+        <ActiveService
+          data={activeService}
+          openServices={() => dispatch(setOpenIncidents(!shouldRenderIncidents))}
+          status={shouldRenderIncidents}
+        />
       </div> || null
       }
-      <Incidents />
+      {shouldRenderIncidents && <Incidents /> || null}
     </div>
   )
 }
