@@ -3,14 +3,16 @@ import { RootState, AppThunk } from "../../app/store"
 import { fetchServices } from "./servicesAPI"
 
 export interface ServicesState {
-  services: Array<any>
+  services: Array<any>,
+  activeServiceId: String,
   status: "idle" | "loading" | "failed"
 }
 
 const initialState: ServicesState = {
   services: [],
+  activeServiceId: 'asdf',
   status: "idle",
-}
+};
 
 export const incrementAsync = createAsyncThunk(
   "services/fetchServices",
@@ -23,6 +25,12 @@ export const incrementAsync = createAsyncThunk(
 export const servicesSlice = createSlice({
   name: "services",
   initialState,
+  reducers: {
+    setActiveService(state, action: PayloadAction<String>) {
+      console.log(action.payload, 'jijijo');
+      state.activeServiceId = action.payload;
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(incrementAsync.pending, (state) => {
@@ -38,6 +46,9 @@ export const servicesSlice = createSlice({
   },
 })
 
-export const selectServices = (state: RootState) => state.services
+export const { setActiveService } = servicesSlice.actions;
+
+export const selectServices = (state: RootState) => state.services.services;
+export const activeServiceSelector = (state: RootState) => state.services.services.filter(item => item.id === state.services.activeServiceId);
 
 export default servicesSlice.reducer

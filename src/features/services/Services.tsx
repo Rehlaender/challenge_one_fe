@@ -4,26 +4,33 @@ import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import {
   incrementAsync,
   selectServices,
-  selectActiveService,
+  setActiveService,
+  activeServiceSelector,
 } from "./servicesSlice"
 import styles from "./Services.module.css"
 
-const Service = ({ value }) => {
+const Service = ({ value, awesomeFunction }) => {
   const { name, id } = value;
-  return <tr onClick={() => console.log(id)} key={id}><td>{id}</td><td>{name}</td></tr>
+
+  return <tr onClick={() => awesomeFunction(id)} key={id}><td>{id}</td><td>{name}</td></tr>
 }
 
-const ActiveService = ({ data }) => {
+const ActiveService = ({data}) => {
+  const service = data[0]
   return (
     <>
       <h2>active service</h2>
-      <p>{JSON.stringify(data)}</p>
+      <div>
+        <p>name: {service.name}</p>
+        <p>id: {service.id}</p>
+        <p>description: {service.description}</p>
+      </div>
     </>
   )
 }
 
-const ServicesList = ({ services }) => {
-  const serviceList = services.services.map((item, index) => <Service value={item} /> || 'no services');
+const ServicesList = ({ services, awesomeFunction }) => {
+  const serviceList = services.map((item, index) => <Service awesomeFunction={awesomeFunction} value={item} /> || 'no services');
   return (
     <table border={1}>
       <thead>
@@ -41,8 +48,12 @@ const ServicesList = ({ services }) => {
 
 export function Services() {
   const allServices = useAppSelector(selectServices)
-  const activeService = useAppSelector(selectActiveService)
+  const activeService = useAppSelector(activeServiceSelector)
   const dispatch = useAppDispatch()
+
+  function awesomeFunction(id) {
+    dispatch(setActiveService(id))
+  }
 
   useEffect(() => {
     dispatch(incrementAsync())
@@ -51,7 +62,7 @@ export function Services() {
   return (
     <div>
       <div>
-        <ServicesList services={allServices} />
+        <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
       </div>
       <div>
         <ActiveService data={activeService}/>
