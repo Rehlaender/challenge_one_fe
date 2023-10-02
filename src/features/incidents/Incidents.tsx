@@ -10,6 +10,9 @@ import {
   setActiveIncident,
   editIncident,
 } from "./incidentsSlice";
+import {
+  userEmailSelector
+} from "../services/servicesSlice";
 import styles from "./Incidents.module.css"
 import styles2 from "../services/Services.module.css"
 
@@ -117,6 +120,7 @@ export function Incidents() {
   const allIncidentsByService = useAppSelector(incidentsSelector);
   const activeServiceName = useAppSelector(activeServiceNameSelector);
   const activeIncident = useAppSelector(activeIncidentSelector);
+  const getEmail = useAppSelector(userEmailSelector)
   const dispatch = useAppDispatch();
 
   const [isCreating, setIsCreating] = useState(false);
@@ -132,7 +136,7 @@ export function Incidents() {
   function submitUpdatedIncident(payload) {
     const formPayload = {
       "id": payload.id,
-      "from": "awesomeemail@company.com",
+      "from": getEmail,
       "form": {
         "incident": {
           "type": "incident_reference",

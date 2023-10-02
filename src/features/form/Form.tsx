@@ -1,12 +1,16 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-import { useAppSelector, useAppDispatch } from "../../app/hooks"
+import { useAppDispatch, useAppSelector } from "../../app/hooks"
 import {
     createNewIncident,
 } from "./formSlice";
+import {
+    userEmailSelector,
+} from "../services/servicesSlice";
 import styles from "../services/Services.module.css"
 
 export function Form() {
+    const getEmail = useAppSelector(userEmailSelector)
     const dispatch = useAppDispatch();
 
     const [title, titleInput] = useInput({ name: "title", type: "text" });
@@ -21,7 +25,7 @@ export function Form() {
 
     function submitForm() {
         const payload = {
-            from: "awesomeemail@company.com",
+            from: getEmail,
             form: {
                 incident: {
                     type: "incident",

@@ -7,6 +7,7 @@ export interface ServicesState {
   activeServiceId: String,
   status: "idle" | "loading" | "failed",
   openIncidents: Boolean,
+  email: string,
 }
 
 const initialState: ServicesState = {
@@ -14,6 +15,7 @@ const initialState: ServicesState = {
   activeServiceId: 'asdf',
   status: "idle",
   openIncidents: false,
+  email: "awesomeemail@company.com",
 };
 
 export const incrementAsync = createAsyncThunk(
@@ -30,6 +32,9 @@ export const servicesSlice = createSlice({
   reducers: {
     setActiveService(state, action: PayloadAction<String>) {
       state.activeServiceId = action.payload;
+    },
+    setEmail(state, action: PayloadAction<String>) {
+      state.email = action.payload;
     },
     setOpenIncidents(state, action: PayloadAction<Boolean>) {
       state.openIncidents = action.payload;
@@ -50,8 +55,9 @@ export const servicesSlice = createSlice({
   },
 })
 
-export const { setActiveService, setOpenIncidents } = servicesSlice.actions;
+export const { setEmail, setActiveService, setOpenIncidents } = servicesSlice.actions;
 
+export const userEmailSelector = (state: RootState) => state.services.email;
 export const selectServices = (state: RootState) => state.services.services;
 export const activeServiceSelector = (state: RootState) => state.services.services.filter(item => item.id === state.services.activeServiceId);
 export const shouldRenderIncidentsSelector = (state: RootState) => state.services.openIncidents;

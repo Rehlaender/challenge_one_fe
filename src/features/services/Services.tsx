@@ -8,6 +8,8 @@ import {
   setOpenIncidents,
   activeServiceSelector,
   shouldRenderIncidentsSelector,
+  userEmailSelector,
+  setEmail
 } from "./servicesSlice"
 import styles from "./Services.module.css"
 
@@ -24,7 +26,7 @@ const ActiveService = ({ data, openServices, status }) => {
   return (
     <div>
       <h2>active service {'->'} {service?.name}</h2>
-      <div style={{width: '300px', margin: 'auto'}}>
+      <div style={{ width: '300px', margin: 'auto' }}>
         <p><strong>name:</strong> {service?.name}</p>
         <p><strong>id:</strong> {service?.id}</p>
         <p><strong>description:</strong> {service?.description}</p>
@@ -54,6 +56,7 @@ const ServicesList = ({ services, awesomeFunction }) => {
 
 export function Services() {
   const allServices = useAppSelector(selectServices)
+  const getEmail = useAppSelector(userEmailSelector)
   const activeService = useAppSelector(activeServiceSelector)
   const shouldRenderIncidents = useAppSelector(shouldRenderIncidentsSelector)
   const dispatch = useAppDispatch()
@@ -66,24 +69,33 @@ export function Services() {
     dispatch(incrementAsync())
   }, []);
 
+  function changeEmail(event) {
+    dispatch(setEmail(event.target.value));
+  }
+
   return (
     <div className={styles.column}>
       <div className={styles.separator}></div>
-      <h1>All services</h1>
-      <p>Click on any service below to render their incidents</p>
-      <div >
-        <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
-      </div>
+      <p>To start please add your email asociated with your api instance</p>
+      <p><input value={getEmail} onChange={changeEmail} /></p>
       <div className={styles.separator}></div>
-      {activeService.length && <div>
-        <ActiveService
-          data={activeService}
-          openServices={() => dispatch(setOpenIncidents(!shouldRenderIncidents))}
-          status={shouldRenderIncidents}
-        />
-      </div> || null
-      }
-      {shouldRenderIncidents && <Incidents /> || null}
+      {getEmail && <div className={styles.column}>
+        <h1>All services</h1>
+        <p>Click on any service below to render their incidents</p>
+        <div >
+          <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
+        </div>
+        <div className={styles.separator}></div>
+        {activeService.length && <div>
+          <ActiveService
+            data={activeService}
+            openServices={() => dispatch(setOpenIncidents(!shouldRenderIncidents))}
+            status={shouldRenderIncidents}
+          />
+        </div> || null
+        }
+        {shouldRenderIncidents && <Incidents /> || null}
+      </div>}
     </div>
   )
 }
