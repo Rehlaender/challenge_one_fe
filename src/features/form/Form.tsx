@@ -2,11 +2,10 @@ import { useState, useEffect } from "react"
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import {
-    createNewIncident
+    createNewIncident,
 } from "./formSlice";
 
 export function Form() {
-    // const activeIncident = useAppSelector(activeIncidentSelector);
     const dispatch = useAppDispatch();
 
     const [title, titleInput] = useInput({ name: "title", type: "text" });

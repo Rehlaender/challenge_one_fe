@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../../app/store"
-import { fetchIncidentsByService } from "./incidentsAPI"
+import { fetchIncidentsByService, fetchEditIncident } from "./incidentsAPI"
 
 export interface IncidentsState {
   incidents: Array<any>,
@@ -22,7 +22,15 @@ export const getIncidentsAsync = createAsyncThunk(
     const response = await fetchIncidentsByService(id)
     return response
   },
-)
+);
+
+export const editIncident = createAsyncThunk(
+  "incidents/fetchEditIncident",
+  async (payload) => {
+    const response = await fetchEditIncident(payload);
+    return response;
+  },
+);
 
 export const incidentsSlice = createSlice({
   name: "incidents",

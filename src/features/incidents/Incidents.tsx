@@ -8,6 +8,7 @@ import {
   activeServiceNameSelector,
   activeIncidentSelector,
   setActiveIncident,
+  editIncident,
 } from "./incidentsSlice";
 import styles from "./Incidents.module.css"
 
@@ -36,17 +37,76 @@ const IncidentsList = ({ incidents, awesomeFunction }) => {
   ) || null;
 }
 
-const ActiveService = ({ data }) => {
+const ActiveService = ({ data, submitEdit }) => {
   const incident = data[0];
+  const [form, setForm] = useState({
+    title: '',
+    description: '',
+    status: '',
+  });
+  const [isEditing, setIsEditing] = useState(false);
+
+  function willSetEditing(value) {
+    setIsEditing(value);
+  }
+
+  function resetForm() {
+    setForm({
+      title: '',
+      description: '',
+      status: '',
+    })
+  }
+
+  function initiateForm() {
+    setForm({
+      title: incident?.title,
+      description: incident?.description,
+      status: incident?.status,
+    })
+  }
+
+  useEffect(() => {
+    !isEditing ? resetForm() : initiateForm()
+  }, [isEditing]);
+
+  function submitForm() {
+    submitEdit({
+      id: incident?.id,
+      ...form
+    });
+  }
+
+  function handleTitleChange(inputName, e) {
+    setForm({
+      ...form,
+      [inputName]: e?.target?.value
+    });
+  }
+
   return (
     <>
       <h2>active incident</h2>
-      <div>
+      <button onClick={() => willSetEditing(!isEditing)}>{isEditing ? 'Cancel' : 'Edit service'}</button>
+      {isEditing && <div>
+        <p>id: {incident?.id}</p>
+        <p>title: <input value={form?.title} onChange={(e) => handleTitleChange('title', e)} type="text"/></p>
+        change from <strong>{incident?.status}</strong> to: 
+        <select name="selectStatus" defaultValue={form?.status}
+          onChange={(e) => handleTitleChange('status', e)}>
+          <option value="triggered">triggered</option>
+          <option value="resolved">resolved</option>
+          <option value="acknowledged">acknowledged</option>
+        </select>
+        <p>description: <input value={form?.description} type="text" onChange={(e) => handleTitleChange('description', e)} /></p>
+        {isEditing && <button onClick={() => submitForm()}>Submit</button>}
+      </div>}
+      {!isEditing && <div>
         <p>id: {incident?.id}</p>
         <p>title: {incident?.title}</p>
         <strong><p style={styles}>status: {incident?.status}</p></strong>
         <p>description: {incident?.description}</p>
-      </div>
+      </div>}
     </>
   )
 }
@@ -68,6 +128,25 @@ export function Incidents() {
     dispatch(setActiveIncident(id))
   }
 
+  function submitUpdatedIncident(payload) {
+    const formPayload = {
+      "id": payload.id,
+      "from": "awesomeemail@company.com",
+      "form": {
+        "incident": {
+          "type": "incident_reference",
+          "title": payload?.title,
+          "status": payload?.status,
+          "body": {
+            "type": "new incident",
+            "details": payload?.description
+          }
+        }
+      }
+    }
+    dispatch(editIncident(formPayload))
+  }
+
   return (
     <div>
       <h3>Incidents at: {activeServiceName}</h3>
@@ -76,6 +155,7 @@ export function Incidents() {
       {!isCreating && activeIncident.length && <div>
         <ActiveService
           data={activeIncident}
+          submitEdit={submitUpdatedIncident}
         />
       </div> || null
       }
