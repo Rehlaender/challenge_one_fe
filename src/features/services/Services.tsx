@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useEffect } from "react"
 
 import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import {
@@ -22,16 +22,16 @@ const Service = ({ value, awesomeFunction }) => {
 const ActiveService = ({ data, openServices, status }) => {
   const service = data[0]
   return (
-    <>
-      <h2>active service</h2>
-      <div>
-        <p>name: {service?.name}</p>
-        <p>id: {service?.id}</p>
-        <p>description: {service?.description}</p>
+    <div>
+      <h2>active service {'->'} {service?.name}</h2>
+      <div style={{width: '300px', margin: 'auto'}}>
+        <p><strong>name:</strong> {service?.name}</p>
+        <p><strong>id:</strong> {service?.id}</p>
+        <p><strong>description:</strong> {service?.description}</p>
       </div>
-      <button>home</button>
-      <button onClick={() => openServices()}>{status ? 'close incidents' : 'open incidents 4 service'}</button>
-    </>
+      <div className={styles.separator}></div>
+      <button className={styles.button} onClick={() => openServices()}>{status ? 'close incidents' : 'open incidents 4 service'}</button>
+    </div>
   )
 }
 
@@ -67,10 +67,14 @@ export function Services() {
   }, []);
 
   return (
-    <div>
-      <div>
+    <div className={styles.column}>
+      <div className={styles.separator}></div>
+      <h1>All services</h1>
+      <p>Click on any service below to render their incidents</p>
+      <div >
         <ServicesList awesomeFunction={awesomeFunction} services={allServices} />
       </div>
+      <div className={styles.separator}></div>
       {activeService.length && <div>
         <ActiveService
           data={activeService}

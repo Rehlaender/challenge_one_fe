@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from "../../app/hooks"
 import {
     createNewIncident,
 } from "./formSlice";
+import styles from "../services/Services.module.css"
 
 export function Form() {
     const dispatch = useAppDispatch();
@@ -41,10 +42,11 @@ export function Form() {
     return (
         <div>
             <h3>Create new Incident</h3>
+            <div className={styles.separator}></div>
             <p>Creating Incident for this active service: {activeServiceInput}</p>
             <p>{titleInput}</p>
             <p>{descriptionInput}</p>
-            <button onClick={submitForm}>Submit</button>
+            <button className={styles.button} onClick={submitForm}>Submit</button>
         </div>
     )
 }

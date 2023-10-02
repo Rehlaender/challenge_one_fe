@@ -11,6 +11,7 @@ import {
   editIncident,
 } from "./incidentsSlice";
 import styles from "./Incidents.module.css"
+import styles2 from "../services/Services.module.css"
 
 import { Form } from "../form/Form";
 
@@ -87,7 +88,7 @@ const ActiveService = ({ data, submitEdit }) => {
   return (
     <>
       <h2>active incident</h2>
-      <button onClick={() => willSetEditing(!isEditing)}>{isEditing ? 'Cancel' : 'Edit service'}</button>
+      <button className={styles2.button} onClick={() => willSetEditing(!isEditing)}>{isEditing ? 'Cancel' : 'Edit service'}</button>
       {isEditing && <div>
         <p>id: {incident?.id}</p>
         <p>title: <input value={form?.title} onChange={(e) => handleTitleChange('title', e)} type="text"/></p>
@@ -99,7 +100,7 @@ const ActiveService = ({ data, submitEdit }) => {
           <option value="acknowledged">acknowledged</option>
         </select>
         <p>description: <input value={form?.description} type="text" onChange={(e) => handleTitleChange('description', e)} /></p>
-        {isEditing && <button onClick={() => submitForm()}>Submit</button>}
+        {isEditing && <button className={styles2.button} onClick={() => submitForm()}>Submit</button>}
       </div>}
       {!isEditing && <div>
         <p>id: {incident?.id}</p>
@@ -149,8 +150,8 @@ export function Incidents() {
 
   return (
     <div>
-      <h3>Incidents at: {activeServiceName}</h3>
-      <button onClick={() => setIsCreating(!isCreating)}>Create new Incident</button>
+      <h2>Incidents at: {activeServiceName}</h2>
+      <button className={styles2.button} onClick={() => setIsCreating(!isCreating)}>{!isCreating ? 'Create new Incident' : 'Cancel creation'}</button>
       {!isCreating && allIncidentsByService.length && <IncidentsList incidents={allIncidentsByService} awesomeFunction={awesomeFunction} />}
       {!isCreating && activeIncident.length && <div>
         <ActiveService
