@@ -5,31 +5,13 @@ import {
     createNewIncident
 } from "./formSlice";
 
-const examplePayload = {
-    from: "awesomeemail@company.com",
-    form: {
-        incident: {
-            type: "incident",
-            title: "title",
-            service: {
-                id: "service",
-                type: ""
-            },
-            body: {
-                type: "incident",
-                details: "details"
-            }
-        }
-    }
-}
-
 export function Form() {
     // const activeIncident = useAppSelector(activeIncidentSelector);
     const dispatch = useAppDispatch();
 
     const [title, titleInput] = useInput({ name: "title", type: "text" });
     const [description, descriptionInput] = useInput({ name: "description", type: "text" });
-    const [status, statusInput] = useInput({ name: "status", type: "text" });
+    const [activeService, activeServiceInput] = useInput({ name: "service", type: "text" });
    
     function useInput({ type, name }) {
         const [value, setValue] = useState("");
@@ -45,7 +27,7 @@ export function Form() {
                     type: "incident",
                     title: title,
                     service: {
-                        id: "service",
+                        id: activeService,
                         type: "service_reference"
                     },
                     body: {
@@ -55,15 +37,13 @@ export function Form() {
                 }
             }
         }
-        console.log('aweso');
         dispatch(createNewIncident(payload))
     }
     return (
         <div>
             <h3>Create new Incident</h3>
-            <p>Creating Incident for this active service: </p>
+            <p>Creating Incident for this active service: {activeServiceInput}</p>
             <p>{titleInput}</p>
-            <p>{statusInput}</p>
             <p>{descriptionInput}</p>
             <button onClick={submitForm}>Submit</button>
         </div>

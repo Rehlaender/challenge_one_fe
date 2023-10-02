@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState, AppThunk } from "../../app/store"
-import { createIncident } from "./FormAPI"
+import { createIncident } from "./formAPI"
 
 export interface NewIncidentState {
   title: String,
@@ -17,9 +17,8 @@ const initialState: NewIncidentState = {
 export const createNewIncident = createAsyncThunk(
   "form/createNewIncident",
   async (payload) => {
-    // const response = await createNewIncident(payload)
-    console.log('awesome payload', payload);
-    return 'response'
+    const response = await createIncident(payload);
+    return response;
   },
 )
 
@@ -32,7 +31,7 @@ export const formSlice = createSlice({
       .addCase(createNewIncident.pending, (state) => {
         state.status = "loading"
       })
-      .addCase(createNewIncident.fulfilled, (state, action) => {
+      .addCase(createNewIncident.fulfilled, (state) => {
         state.status = "idle"
       })
       .addCase(createNewIncident.rejected, (state) => {

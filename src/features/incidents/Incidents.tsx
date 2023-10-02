@@ -37,7 +37,7 @@ const IncidentsList = ({ incidents, awesomeFunction }) => {
 }
 
 const ActiveService = ({ data }) => {
-  const incident = data[0]
+  const incident = data[0];
   return (
     <>
       <h2>active incident</h2>
@@ -65,7 +65,6 @@ export function Incidents() {
   }, [activeService]);
 
   function awesomeFunction(id) {
-    console.log('lego');
     dispatch(setActiveIncident(id))
   }
 
