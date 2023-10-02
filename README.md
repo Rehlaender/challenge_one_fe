@@ -34,6 +34,8 @@ described in the points b and c :heavy_check_mark:
 
 *The home page should render every service you got registered at your app instance
 
+*First set your email if you want to be able to create/update instances
+
 *Then if you click in any service it will render the active service details, name, id, description
 
 *Then you should click on "open incidents 4 service", that button will load every incident asociated with the service
